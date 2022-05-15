@@ -5,3 +5,9 @@ src/dlg/dlg.c
 subprojects/*
 !subprojects/*.wrap
 /tests/data/*
+
+VCToOtherDir/objs/Win32/Release/freetype.tlog/
+
+*.log
+
+*.tlog
