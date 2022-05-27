@@ -11,3 +11,7 @@ VCToOtherDir/objs/Win32/Release/freetype.tlog/
 *.log
 
 *.tlog
+
+VCToOtherDir/.vs/freetype/v16/.suo
+
+VCToOtherDir/.vs/freetype/v16/Preview/Browse.VC.db
