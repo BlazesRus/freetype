@@ -15,3 +15,11 @@ VCToOtherDir/objs/Win32/Release/freetype.tlog/
 VCToOtherDir/.vs/freetype/v16/.suo
 
 VCToOtherDir/.vs/freetype/v16/Preview/Browse.VC.db
+
+*.obj
+
+VCToOtherDir/ObjectFiles/freetype/Release_Win32/freetype.dll.recipe
+
+VCToOtherDir/ObjectFiles/freetype/Release_Win32/
+
+VCToOtherDir/Win32/
