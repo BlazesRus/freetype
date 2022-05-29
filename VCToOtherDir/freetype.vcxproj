@@ -61,31 +61,34 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{78B079BD-9FC7-4B9E-B4A6-96DA0F00248B}</ProjectGuid>
     <RootNamespace>FreeType</RootNamespace>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>NotSet</CharacterSet>
+<!--     <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>NotSet</CharacterSet> -->
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <TargetName>FreetypeBlazesRus</TargetName>
+    <!--Alternative name to make more obviously changed potential source code from fork-->
   </PropertyGroup>
   <PropertyGroup Label="UserMacros">
     <RootDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)..\..\'))</RootDirectory>
     <ParentOfRoot>$([System.IO.Path]::GetFullPath('$(RootDirectory)\..\'))</ParentOfRoot>
+    <stbVectorDir>$([System.IO.Path]::GetFullPath('$(RootDirectory)\stb\'))</stbVectorDir>
   </PropertyGroup>
   <Choose>
     <When Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugStatic'">
       <PropertyGroup>
-          <ConfigurationStyle>Debug</ConfigurationStyle>
+        <ConfigurationStyle>Debug</ConfigurationStyle>
       </PropertyGroup>
     </When>
     <Otherwise>
       <PropertyGroup>
-          <ConfigurationStyle>Release</ConfigurationStyle>
+        <ConfigurationStyle>Release</ConfigurationStyle>
       </PropertyGroup>
     </Otherwise>
   </Choose>
   <PropertyGroup>
-    <SDLOutputDir>$([System.IO.Path]::GetFullPath('$(ParentOfRoot)TangeriaCoop\src\_SDL2VC\'))</SDLOutputDir>
+    <SDLOutputDir>$([System.IO.Path]::GetFullPath('$(ParentOfRoot)TangariaCoop\src\_SDL2VC\'))</SDLOutputDir>
     <SDLLibDir Condition="'$(Configuration)' != 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(SDLOutputDir)$(Platform)\'))</SDLLibDir>
     <SDLLibDir Condition="'$(Configuration)' == 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(SDLOutputDir)Clang$(Platform)\'))</SDLLibDir>
-<!--    <FreeTypeLibrary>$([System.IO.Path]::GetFullPath('$(SDLLibDir)freetype.lib'))</FreeTypeLibrary>-->
+    <!--    <FreeTypeLibrary>$([System.IO.Path]::GetFullPath('$(SDLLibDir)FreetypeBlazesRus.lib'))</FreeTypeLibrary>-->
   </PropertyGroup>
   <PropertyGroup Label="ToolsetOptions">
     <!-- 142 for VS2019(Default);143 for VS2022-->
@@ -108,9 +111,14 @@
   <PropertyGroup Label="OutputInfo">
     <OutDir>$(SDLLibDir)</OutDir>
     <IntDir>$(SDLOutputDir)ObjectFiles\$(ProjectName)\$(Configuration)_$(Platform)\</IntDir>
-    <IncludePath>..\include;..\builds\windows\;%(IncludePath)</IncludePath>
+    <IncludePath>$(stbVectorDir);..\include;..\builds\windows\;%(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(ConfigurationStyle)'=='Debug'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(UserOptionDirectory);include;$(UserIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -119,7 +127,6 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(ConfigurationType)'=='DynamicLibrary'">MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeLibrary Condition="'$(ConfigurationType)'=='StaticLibrary'">MultiThreadedDebug</RuntimeLibrary>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
@@ -127,11 +134,15 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='Win32' Or '$(Configuration)' == 'ReleaseC99'">StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='x64' And '$(Configuration)' != 'ReleaseC99'">AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <LanguageStandard_C Condition="'$(CStandardType)'!='C89'">stdc17</LanguageStandard_C>
+      <DisableLanguageExtensions Condition="'$(CStandardType)'=='C89'">true</DisableLanguageExtensions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;$(UserDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(ConfigurationType)'=='DynamicLibrary'">%(PreprocessorDefinitions);DLL_EXPORT</PreprocessorDefinitions>
-      <Culture>0x0409</Culture>
+<!--       <Culture>0x0409</Culture> -->
     </ResourceCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -143,6 +154,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(ConfigurationStyle)'=='Release'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
@@ -152,20 +168,21 @@
       <RuntimeLibrary Condition="'$(ConfigurationType)'=='DynamicLibrary'">MultiThreadedDLL</RuntimeLibrary>
       <RuntimeLibrary Condition="'$(ConfigurationType)'=='StaticLibrary'">MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
       <WarningLevel>Level4</WarningLevel>
       <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4001</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <EnableEnhancedInstructionSet Condition="'$(Configuration)'=='Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <EnableEnhancedInstructionSet Condition="'$(Configuration)'=='x64'">AdvancedVectorExtensions</EnableEnhancedInstructionSet>
-      <EnableEnhancedInstructionSet Condition="'$(Configuration)'=='ARM64'">NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='Win32' Or '$(Configuration)' == 'ReleaseC99'">StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='x64' And '$(Configuration)' != 'ReleaseC99'">AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='ARM64'">NotSet</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <LanguageStandard_C Condition="'$(CStandardType)'!='C89'">stdc17</LanguageStandard_C>
+      <DisableLanguageExtensions Condition="'$(CStandardType)'=='C89'">true</DisableLanguageExtensions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;$(UserDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(ConfigurationType)'=='DynamicLibrary'">%(PreprocessorDefinitions);DLL_EXPORT</PreprocessorDefinitions>
-      <Culture>0x0409</Culture>
+<!--       <Culture>0x0409</Culture> -->
     </ResourceCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -224,7 +241,6 @@
     <ClCompile Include="..\builds\windows\ftsystem.c">
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
-    <ResourceCompile Include="..\src\base\ftver.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
@@ -240,10 +256,155 @@
       <DlgDst>..\src\dlg\dlg.c</DlgDst>
     </DlgSrc>
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Version.rc">
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\freetype\freetype.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftadvanc.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftbbox.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftbdf.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftbitmap.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftbzip2.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftcache.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftchapters.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftcid.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftcolor.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftdriver.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\fterrdef.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\fterrors.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftfntfmt.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftgasp.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftglyph.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftgxval.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftgzip.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftimage.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftincrem.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftlcdfil.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftlist.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftlogging.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftlzw.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftmac.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftmm.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftmodapi.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftmoderr.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftotval.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftoutln.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftparams.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftpfr.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftrender.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftsizes.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftsnames.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftstroke.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftsynth.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftsystem.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\fttrigon.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\fttypes.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ftwinfnt.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\otsvg.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\t1tables.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\ttnameid.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\tttables.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\freetype\tttags.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+  </ItemGroup>
   <Target Name="DlgCopy" Inputs="@(DlgSrc)" Outputs="@(DlgSrc->'%(DlgDst)')" Condition="Exists('..\subprojects\dlg\.git')">
     <Copy SourceFiles="@(DlgSrc)" DestinationFiles="@(DlgSrc->'%(DlgDst)')" />
   </Target>
-<!--   <Target Name="AfterBuild">
+  <!--   <Target Name="AfterBuild">
     <ItemGroup>
       <TargetFiles Include="..\$(TargetDir)$(TargetName).*" />
     </ItemGroup>
