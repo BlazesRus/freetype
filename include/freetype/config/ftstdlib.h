@@ -107,9 +107,11 @@
    *                          file handling
    *
    */
-
-
 #include <stdio.h>
+
+#ifdef USE_STB_REPLACEMENTS
+#include "..\..\..\VCToOtherDir\StbIncludes.h"
+#endif
 
 #define FT_FILE       FILE
 #define ft_fclose     fclose
@@ -117,11 +119,15 @@
 #define ft_fread      fread
 #define ft_fseek      fseek
 #define ft_ftell      ftell
-//stb replacements to standard functions(Faster & smaller in VS 2008 tests not sure if same on current standards)
-//To-Do:Find a way to prevent multiple files using stbsp_ function files from creating duplicate objects
-#define ft_sprintf    sprintf//stbsp_sprintf
-#define ft_vsprintf   vsprintf//stbsp_vsprintf
-#define ft_vsnprintf  vsnprintf//stbsp_vsnprintf
+#ifdef USE_STB_REPLACEMENTS//stb replacements to standard functions(Faster & smaller in VS 2008 tests not sure if same on current standards)
+#define ft_sprintf    stbsp_sprintf
+#define ft_vsprintf   stbsp_vsprintf
+#define ft_vsnprintf  stbsp_vsnprintf
+#else
+#define ft_sprintf    sprintf
+#define ft_vsprintf   vsprintf
+#define ft_vsnprintf  vsnprintf
+#endif
 
 
 

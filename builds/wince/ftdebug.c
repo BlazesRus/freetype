@@ -44,7 +44,6 @@
 #include <freetype/freetype.h>
 #include <freetype/internal/ftdebug.h>
 
-
 #ifdef FT_DEBUG_LEVEL_ERROR
 
 #include <stdarg.h>
@@ -83,7 +82,7 @@
     va_start( ap, fmt );
     vfprintf( stderr, fmt, ap );
     /* send the string to the debugger as well */
-    vsprintf( buf, fmt, ap );
+    tf_vsprintf( buf, fmt, ap );
     OutputDebugStringEx( buf );
     va_end( ap );
   }
@@ -100,7 +99,7 @@
 
 
     va_start( ap, fmt );
-    vsprintf( buf, fmt, ap );
+    tf_vsprintf( buf, fmt, ap );
     OutputDebugStringEx( buf );
     va_end( ap );
 
@@ -248,7 +247,7 @@
         /* read toggle name, followed by ':' */
         q = p;
         while ( *p && *p != ':' )
-          p++;
+          ++p;
 
         if ( !*p )
           break;
@@ -259,12 +258,12 @@
           FT_Int  level = -1, found = -1;
 
 
-          for ( n = 0; n < trace_count; n++ )
+          for ( n = 0; n < trace_count; ++n )
           {
             const char*  toggle = ft_trace_toggles[n];
 
 
-            for ( i = 0; i < len; i++ )
+            for ( i = 0; i < len; ++i )
             {
               if ( toggle[i] != q[i] )
                 break;
