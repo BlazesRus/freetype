@@ -23,3 +23,5 @@ VCToOtherDir/ObjectFiles/freetype/Release_Win32/freetype.dll.recipe
 VCToOtherDir/ObjectFiles/freetype/Release_Win32/
 
 VCToOtherDir/Win32/
+
+VCToOtherDir/dllmain.cpp

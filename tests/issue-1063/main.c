@@ -3,7 +3,6 @@
 #include <freetype/freetype.h>
 #include <ft2build.h>
 
-
 int
 main( void )
 {
@@ -21,7 +20,7 @@ main( void )
   char         filepath[FILENAME_MAX];
 
 
-  snprintf( filepath, sizeof( filepath ), "%s/%s",
+  ft_snprintf( filepath, sizeof( filepath ), "%s/%s",
             testdata_dir ? testdata_dir : "../tests/data",
             "As.I.Lay.Dying.ttf" );
 
@@ -32,7 +31,7 @@ main( void )
     return 1;
   }
 
-  for ( FT_ULong  i = 59; i < 171; i++ )
+  for ( FT_ULong  i = 59; i < 171; ++i )
   {
     FT_UInt   gid  = FT_Get_Char_Index( face, i );
     FT_Error  code = FT_Load_Glyph( face, gid, FT_LOAD_DEFAULT );

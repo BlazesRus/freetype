@@ -111,13 +111,18 @@
 
 #include <stdio.h>
 
-#define FT_FILE     FILE
-#define ft_fclose   fclose
-#define ft_fopen    fopen
-#define ft_fread    fread
-#define ft_fseek    fseek
-#define ft_ftell    ftell
-#define ft_sprintf  sprintf
+#define FT_FILE       FILE
+#define ft_fclose     fclose
+#define ft_fopen      fopen
+#define ft_fread      fread
+#define ft_fseek      fseek
+#define ft_ftell      ftell
+//stb replacements to standard functions(Faster & smaller in VS 2008 tests not sure if same on current standards)
+//To-Do:Find a way to prevent multiple files using stbsp_ function files from creating duplicate objects
+#define ft_sprintf    sprintf//stbsp_sprintf
+#define ft_vsprintf   vsprintf//stbsp_vsprintf
+#define ft_vsnprintf  vsnprintf//stbsp_vsnprintf
+
 
 
   /**************************************************************************

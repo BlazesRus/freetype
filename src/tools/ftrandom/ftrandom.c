@@ -357,7 +357,7 @@
     max  = 0;
     fcnt = 0;
 
-    for ( i = 0; fontdirs[i] != NULL; i++ )
+    for ( i = 0; fontdirs[i] != NULL; ++i )
     {
       DIR*            examples;
       struct dirent*  ent;
@@ -374,7 +374,7 @@
 
       while ( ( ent = readdir( examples ) ) != NULL )
       {
-        snprintf( buffer, sizeof ( buffer ),
+        ft_snprintf( buffer, sizeof ( buffer ),
                   "%s/%s", fontdirs[i], ent->d_name );
         if ( stat( buffer, &statb ) == -1 || S_ISDIR( statb.st_mode ) )
           continue;
@@ -464,7 +464,7 @@
     fclose( good );
 
     err_cnt = getErrorCnt( item );
-    for ( i = 0; i < err_cnt; i++ )
+    for ( i = 0; i < err_cnt; ++i )
     {
       fseek( newf, getRandom( 0, (int)( item->len - 1 ) ), SEEK_SET );
 
@@ -609,7 +609,7 @@
     dirs = calloc( (size_t)( argc + 1 ), sizeof ( char ** ) );
     exts = calloc( (size_t)( argc + 1 ), sizeof ( char ** ) );
 
-    for ( i = 1; i < argc; i++ )
+    for ( i = 1; i < argc; ++i )
     {
       char*  pt = argv[i];
       char*  end;

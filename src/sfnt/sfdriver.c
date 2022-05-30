@@ -439,6 +439,8 @@
         k1  = ROTL32( k1, 15 );
         k1 *= c2;
         h1 ^= k1;
+      default:
+        break;
       }
     }
 
@@ -1002,7 +1004,7 @@
       /* the PS name is too long; replace the part after the prefix with */
       /* a checksum; we use MurmurHash 3 with a hash length of 128 bit   */
 
-      FT_UInt32  seed = 123456789;
+      const FT_UInt32  seed = 123456789;
 
       FT_UInt32   hash[4];
       FT_UInt32*  h;
@@ -1022,12 +1024,12 @@
       *p-- = '.';
       *p-- = '.';
 
-      for ( i = 0; i < 4; i++, h-- )
+      for ( i = 0; i < 4; ++i, --h )
       {
         FT_UInt32  v = *h;
 
 
-        for ( j = 0; j < 8; j++ )
+        for ( j = 0; j < 8; ++j )
         {
           *p--   = hexdigits[v & 0xF];
           v    >>= 4;
