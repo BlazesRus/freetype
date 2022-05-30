@@ -24,7 +24,7 @@ BEGIN
             VALUE "FileDescription", "Font Rendering Library(Fork)\0"
             VALUE "FileVersion", "2, 12, 1, f\0"
             VALUE "InternalName", "freetype\0"
-            VALUE "LegalCopyright", "\251 2000-2022 The FreeType Project www.freetype.org. All rights reserved.\0"
+            VALUE "LegalCopyright", "Copyright (C) 2000-2022 The FreeType Project www.freetype.org. All rights reserved.\0"
             VALUE "OriginalFilename", "freetype.dll\0"
             VALUE "ProductName", "FreeType\0"
             VALUE "ProductVersion", "2, 12, 1, f-BlazesRus\0"

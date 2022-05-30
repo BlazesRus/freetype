@@ -109,10 +109,6 @@
    */
 #include <stdio.h>
 
-#ifdef USE_STB_REPLACEMENTS
-#include "..\..\..\VCToOtherDir\StbIncludes.h"
-#endif
-
 #define FT_FILE       FILE
 #define ft_fclose     fclose
 #define ft_fopen      fopen
@@ -120,6 +116,7 @@
 #define ft_fseek      fseek
 #define ft_ftell      ftell
 #ifdef USE_STB_REPLACEMENTS//stb replacements to standard functions(Faster & smaller in VS 2008 tests not sure if same on current standards)
+//To-Do:Link to interface to prevent duplicate object linking error
 #define ft_sprintf    stbsp_sprintf
 #define ft_vsprintf   stbsp_vsprintf
 #define ft_vsnprintf  stbsp_vsnprintf

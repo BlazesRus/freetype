@@ -753,7 +753,7 @@
             FT_TRACE2(( "  table    length\n" ));
             FT_TRACE2(( "  ------------------------------\n" ));
 
-            for ( i = 0; i < num_tables; i++ )
+            for ( i = 0; i < num_tables; ++i )
             {
               FT_Byte*  p = face->ttf_data + 12 + 16 * i + 12;
 

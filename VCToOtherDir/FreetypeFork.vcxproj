@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseC99|Win32">
+      <Configuration>ReleaseC99</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseC99|x64">
+      <Configuration>ReleaseC99</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugStatic|Win32">
+      <Configuration>DebugStatic</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugStatic|x64">
+      <Configuration>DebugStatic</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseStatic|Win32">
+      <Configuration>ReleaseStatic</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseStatic|x64">
+      <Configuration>ReleaseStatic</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D8C62659-19A9-419A-B74E-DBA49DD5576A}</ProjectGuid>
+    <RootNamespace>FreeType</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <TargetName>FreetypeBlazesRus</TargetName>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros">
+    <RootDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)..\..\'))</RootDirectory>
+    <ParentOfRoot>$([System.IO.Path]::GetFullPath('$(RootDirectory)\..\'))</ParentOfRoot>
+    <stbVectorDir>$([System.IO.Path]::GetFullPath('$(ParentOfRoot)\stb\'))</stbVectorDir>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="'$(Configuration)' == 'ReleaseStatic' Or '$(Configuration)' == 'DebugStatic'">
+      <PropertyGroup>
+        <ConfigurationType>StaticLibrary</ConfigurationType>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <ConfigurationType>DynamicLibrary</ConfigurationType>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  <Choose>
+    <When Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugStatic'">
+      <PropertyGroup>
+        <ConfigurationStyle>Debug</ConfigurationStyle>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <ConfigurationStyle>Release</ConfigurationStyle>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  <PropertyGroup>
+    <SDLOutputDir>$([System.IO.Path]::GetFullPath('$(ParentOfRoot)TangariaCoop\src\_SDL2VC\'))</SDLOutputDir>
+    <SDLLibDir Condition="'$(Configuration)' != 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(SDLOutputDir)$(Platform)\'))</SDLLibDir>
+    <SDLLibDir Condition="'$(Configuration)' == 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(SDLOutputDir)Clang$(Platform)\'))</SDLLibDir>
+    <!--    <FreeTypeLibrary>$([System.IO.Path]::GetFullPath('$(SDLLibDir)FreetypeBlazesRus.lib'))</FreeTypeLibrary>-->
+  </PropertyGroup>
+  <PropertyGroup Label="ToolsetOptions">
+    <!-- 142 for VS2019(Default);143 for VS2022-->
+    <PlatformToolset Condition="'$(Configuration)' == 'ReleaseC99'">ClangCL</PlatformToolset>
+    <PlatformToolset Condition="'$(Configuration)' != 'ReleaseC99' And '$(VisualStudioVersion)' != '17'">v142</PlatformToolset>
+    <PlatformToolset Condition="'$(Configuration)' != 'ReleaseC99' And '$(VisualStudioVersion)' == '17'">v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="GlobalsPart2">
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ConfigurationStyle)'=='Debug'" Label="Configuration">
+    <LinkIncremental>true</LinkIncremental>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ConfigurationStyle)'=='Release'" Label="Configuration">
+    <LinkIncremental>false</LinkIncremental>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="OutputInfo">
+    <OutDir>$(SDLLibDir)</OutDir>
+    <IntDir>$(SDLOutputDir)ObjectFiles\$(ProjectName)\$(Configuration)_$(Platform)\</IntDir>
+    <IncludePath>$(stbVectorDir);..\include;..\builds\windows\;%(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(stbVectorDir);$(UserOptionDirectory);include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LIB;FT2_BUILD_LIBRARY;$(UserDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <!--<PreprocessorDefinitions>%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>-->
+      <PreprocessorDefinitions Condition="'$(ConfigurationType)'=='DynamicLibrary'">%(PreprocessorDefinitions);DLL_EXPORT;_USRDLL;</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary Condition="'$(ConfigurationType)'=='DynamicLibrary'">MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(ConfigurationType)'=='StaticLibrary'">MultiThreadedDebug</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <DisableSpecificWarnings>4001;4267</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='Win32' Or '$(Configuration)' == 'ReleaseC99'">StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='x64' And '$(Configuration)' != 'ReleaseC99'">AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <LanguageStandard_C Condition="'$(CStandardType)'!='C89'">stdc17</LanguageStandard_C>
+      <DisableLanguageExtensions Condition="'$(CStandardType)'=='C89'">true</DisableLanguageExtensions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <TargetMachine Condition="'$(Configuration)'=='Win32'">MachineX86</TargetMachine>
+      <TargetMachine Condition="'$(Configuration)'=='x64'">MachineX64</TargetMachine>
+      <TargetMachine Condition="'$(Configuration)'=='ARM64'">MachineARM64</TargetMachine>
+      <AdditionalLibraryDirectories>$(UserLibraryDirectories);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(UserDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(stbVectorDir);$(UserOptionDirectory);include;$(UserIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LIB;FT2_BUILD_LIBRARY;$(UserDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(ConfigurationType)'=='DynamicLibrary'">%(PreprocessorDefinitions);DLL_EXPORT;_USRDLL;</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(ConfigurationType)'=='DynamicLibrary'">MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(ConfigurationType)'=='StaticLibrary'">MultiThreaded</RuntimeLibrary>
+      <ConformanceMode>true</ConformanceMode>
+      <DisableSpecificWarnings>4001;4267</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='Win32' Or '$(Configuration)' == 'ReleaseC99'">StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='x64' And '$(Configuration)' != 'ReleaseC99'">AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='ARM64'">NotSet</EnableEnhancedInstructionSet>
+      <LanguageStandard_C Condition="'$(CStandardType)'!='C89'">stdc17</LanguageStandard_C>
+      <DisableLanguageExtensions Condition="'$(CStandardType)'=='C89'">true</DisableLanguageExtensions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <TargetMachine Condition="'$(Configuration)'=='Win32'">MachineX86</TargetMachine>
+      <TargetMachine Condition="'$(Configuration)'=='x64'">MachineX64</TargetMachine>
+      <TargetMachine Condition="'$(Configuration)'=='ARM64'">MachineARM64</TargetMachine>
+      <AdditionalLibraryDirectories>$(UserLibraryDirectories);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(UserDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h" />
+    <!--<ClCompile Include="dllmain.cpp" />-->
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\autofit\autofit.c" />
+    <ClCompile Include="..\src\base\ftbase.c" />
+    <ClCompile Include="..\src\base\ftbbox.c" />
+    <ClCompile Include="..\src\base\ftbdf.c" />
+    <ClCompile Include="..\src\base\ftbitmap.c" />
+    <ClCompile Include="..\src\base\ftcid.c" />
+    <ClCompile Include="..\src\base\ftfstype.c" />
+    <ClCompile Include="..\src\base\ftgasp.c" />
+    <ClCompile Include="..\src\base\ftglyph.c" />
+    <ClCompile Include="..\src\base\ftgxval.c" />
+    <ClCompile Include="..\src\base\ftinit.c" />
+    <ClCompile Include="..\src\base\ftmm.c" />
+    <ClCompile Include="..\src\base\ftotval.c" />
+    <ClCompile Include="..\src\base\ftpatent.c" />
+    <ClCompile Include="..\src\base\ftpfr.c" />
+    <ClCompile Include="..\src\base\ftstroke.c" />
+    <ClCompile Include="..\src\base\ftsynth.c" />
+    <ClCompile Include="..\src\base\fttype1.c" />
+    <ClCompile Include="..\src\base\ftwinfnt.c" />
+    <ClCompile Include="..\src\bdf\bdf.c" />
+    <ClCompile Include="..\src\cache\ftcache.c" />
+    <ClCompile Include="..\src\cff\cff.c" />
+    <ClCompile Include="..\src\cid\type1cid.c" />
+    <ClCompile Include="..\src\dlg\dlgwrap.c" />
+    <ClCompile Include="..\src\gzip\ftgzip.c" />
+    <ClCompile Include="..\src\lzw\ftlzw.c" />
+    <ClCompile Include="..\src\pcf\pcf.c" />
+    <ClCompile Include="..\src\pfr\pfr.c" />
+    <ClCompile Include="..\src\psaux\psaux.c" />
+    <ClCompile Include="..\src\pshinter\pshinter.c" />
+    <ClCompile Include="..\src\psnames\psmodule.c" />
+    <ClCompile Include="..\src\raster\raster.c" />
+    <ClCompile Include="..\src\sfnt\sfnt.c" />
+    <ClCompile Include="..\src\smooth\smooth.c" />
+    <ClCompile Include="..\src\sdf\sdf.c" />
+    <ClCompile Include="..\src\svg\svg.c" />
+    <ClCompile Include="..\src\truetype\truetype.c" />
+    <ClCompile Include="..\src\type1\type1.c" />
+    <ClCompile Include="..\src\type42\type42.c" />
+    <ClCompile Include="..\src\winfonts\winfnt.c" />
+    <ClCompile Include="..\builds\windows\ftdebug.c">
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+    </ClCompile>
+    <ClCompile Include="..\builds\windows\ftsystem.c">
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FreetypeFork.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
